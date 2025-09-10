@@ -1,0 +1,21 @@
+# On part de l'image Debian 11
+FROM debian:11
+
+# On met à jour et on installe les paquets système utiles
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y build-essential pkg-config python3-dev python3-pip default-libmysqlclient-dev
+
+# On met pip à jour et on installe les bibliothèques Python nécessaires
+RUN pip3 install --upgrade pip && \
+    pip3 install flask-mysqldb mysql-connector-python
+
+# On crée le dossier des templates et on copie les fichiers dedans
+RUN mkdir -p /srv/templates
+COPY index.html /srv/templates/index.html
+COPY app_1.py /srv/app_1.py
+
+# On expose le port de Flask
+EXPOSE 5000
+
+# On lance Flask au démarrage du conteneur
+CMD ["flask","--app","/srv/app_1","run","--host=0.0.0.0"]
