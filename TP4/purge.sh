@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Ecrire un script purge.sh qui va arreter et supprimer tous les conteneurs, qu’ils soient lancés ou arretés.
 
 # docker ps -aq 

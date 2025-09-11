@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # lancement serveur sql
 docker run --rm -d \
 --name tp4-sql \
