@@ -2,16 +2,24 @@
 FROM debian:12
 
 # On met à jour et on installe les paquets système utiles
-RUN apt-get update && apt-get upgrade -y && \
-    apt-get install -y build-essential \ 
-    apt-get install -y pkg-config \
-    apt-get install -y python3-dev \
-    apt-get install -y python3-pip \
-    apt-get install -y default-libmysqlclient-dev
-    
-# On met pip à jour et on installe les bibliothèques Python nécessaires
-RUN pip3 install --upgrade pip && \
-    pip3 install flask-mysqldb mysql-connector-python
+RUN apt-get update 
+RUN apt-get upgrade -y 
+RUN apt-get install -y \
+        build-essential \
+        pkg-config \
+        python3-dev \
+        python3-pip \
+        python3-setuptools \
+        python3-venv \
+        default-libmysqlclient-dev
+
+# Créer un environnement virtuel et installer les libs Python dedans
+RUN python3 -m venv /opt/venv 
+RUN /opt/venv/bin/pip install --upgrade pip 
+RUN /opt/venv/bin/pip install --no-cache-dir flask flask-mysqldb mysql-connector-python
+
+# Rendre le venv prioritaire dans le PATH
+ENV PATH="/opt/venv/bin:${PATH}"
 
 # On crée le dossier des templates et on copie les fichiers dedans
 RUN mkdir -p /srv/templates
