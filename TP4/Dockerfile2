@@ -1,0 +1,34 @@
+# On part de l'image Debian 12
+FROM debian:12
+
+# On met à jour et on installe les paquets système utiles
+RUN apt-get update 
+RUN apt-get upgrade -y 
+RUN apt-get install -y \
+        build-essential \
+        pkg-config \
+        python3-dev \
+        python3-pip \
+        python3-setuptools \
+        python3-venv \
+        default-libmysqlclient-dev
+
+# Créer un environnement virtuel et installer les libs Python dedans
+RUN python3 -m venv /opt/venv && \
+    /opt/venv/bin/pip install --upgrade pip && \
+    /opt/venv/bin/pip install --no-cache-dir flask flask-mysqldb mysql-connector-python
+
+# Rendre le venv prioritaire dans le PATH
+ENV PATH="/opt/venv/bin:${PATH}"
+
+# On expose le port de Flask
+EXPOSE 5000
+
+# On a donc ajouté et definit les variables d'environnement pour Flask
+# pour permettre le debug et le rechargement automatique en developpement
+ENV FLASK_ENV=development
+ENV FLASK_DEBUG=1
+
+# On lance Flask au démarrage du conteneur
+CMD ["flask","--app","/srv/app_1","run","--host=0.0.0.0","--reload"] 
+# et on permet le rechargement automatique avec --reload
