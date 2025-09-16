@@ -13,4 +13,4 @@ docker stop $(docker ps -aq)
 docker rm $(docker ps -aq)
 
 # si besoin supprimer tous inclus les images : docker system prune -af --volumes 
-docker system prune -f --volumes 
+docker system prune -af --volumes 
