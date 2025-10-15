@@ -1,32 +1,25 @@
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
+import java.net.*;
+import java.io.*;
 
 public class ClientTCP2 
 {
     public static void main(String[] args) 
     {
-        // Vérifie qu’un argument a été passé (ex: java ClientTCP2 coucou)
-        if (args.length < 1) 
+        try 
         {
-            System.out.println("Usage : java ClientTCP2 <message>");
-            return;
-        }
-
-        try (Socket socket = new Socket("localhost", 2016);
-             DataOutputStream dOut = new DataOutputStream(socket.getOutputStream())) 
-             {
-
-            // Envoie le premier argument de la ligne de commande
+            Socket socket = new Socket("localhost", 2016);
+            DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+            
+            
             dOut.writeUTF(args[0]);
-            dOut.flush();
-
-            System.out.println("Message envoyé : " + args[0]);
-
-        } 
-        catch (IOException e) 
+           
+           
+                      
+            socket.close();          
+        }
+        catch (Exception e) 
         {
-            System.err.println("Erreur client : " + e.getMessage());
+            System.out.println("Erreur !");
         }
     }
 }

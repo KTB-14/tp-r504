@@ -1,35 +1,25 @@
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
+import java.net.*;
+import java.io.*;
 
 public class ClientTCP3 
 {
     public static void main(String[] args) 
     {
-        if (args.length < 1) 
+        try 
         {
-            System.out.println("Usage : java ClientTCP3 <message>");
-            return;
-        }
+            Socket socket = new Socket("localhost", 2016);
+            DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+            DataInputStream dIn = new DataInputStream(socket.getInputStream());
 
-        try (Socket socket = new Socket("localhost", 2016);
-             DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
-             DataInputStream dIn = new DataInputStream(socket.getInputStream())) 
-             {
-
-            // Envoyer le message
             dOut.writeUTF(args[0]);
-            dOut.flush();
-
-            // Lire la réponse (message inversé)
             String reponse = dIn.readUTF();
-            System.out.println("Réponse du serveur : " + reponse);
+            System.out.println("Message Inversé: " + reponse);
 
-        } 
-        catch (IOException e) 
+            socket.close();
+        }
+        catch (Exception e) 
         {
-            System.err.println("Erreur client: " + e.getMessage());
+            System.out.println("Erreur !");
         }
     }
 }
